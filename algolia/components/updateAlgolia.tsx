@@ -10,26 +10,30 @@ const youtube = google.youtube({
    auth: YOUTUBE_API_KEY,
  });
 
+ let arraySend :any[] | undefined = []
  const fetchVideos = async () => {
    try {
      const response = await youtube.search.list({
-       part: 'snippet',
+       part: ['snippet'],
        channelId: CHANNEL_ID,
        maxResults: 20, // Change this as needed
        order: 'date',
      });
      const vidList = response.data.items;
-     const newArray = vidList.map((item : any) => item.id.videoId ? ({
+     const newArray = vidList?.map((item : any) => item.id.videoId ? ({
       title: item.snippet.title,
       objectID: item.id.videoId,
       url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
       brief: item.snippet.description,
       image : item.snippet.thumbnails.high.url
     }) : null);
-    const validDataArray = newArray.filter((item:any) => item !== null)
-    adminIndexTwo.replaceAllObjects(validDataArray).then(({ objectIDs }) => {
-      console.log(objectIDs);
-    });
+    const validDataArray = newArray?.filter((item:any) => item !== null)
+    arraySend = validDataArray
+    if (arraySend) {
+      adminIndexTwo.replaceAllObjects(arraySend).then(({ objectIDs }) => {
+        console.log(objectIDs);
+      });
+    }
    } catch (error) {
      console.error('Error fetching videos:', error);
    }
