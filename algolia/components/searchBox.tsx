@@ -24,7 +24,6 @@ const SearchPage = () => {
             // Combine the results from both indices
             const combinedResults = [...result1.hits, ...result2.hits];
             setResults(combinedResults);
-            console.log("res", combinedResults)
           } catch (error) {
             console.error('Error performing search:', error);
           }
@@ -54,7 +53,7 @@ const SearchPage = () => {
                <div className="py-3">
                 <h6 className="font-semibold text-base mb-2">{hit.title}</h6>
                 <p className="text-xs mb-3">{hit.brief}</p>
-                { idx%2 ==0 ?<Link href={hit.url} target="_blank" className="px-6 py-1 text-xs ml-auto
+                { hit.objectID.length > 12 ?<Link href={hit.url} target="_blank" className="px-6 py-1 text-xs ml-auto
                  text-white bg-blue-600">{"Read article"}</Link> :
                   <Link href={hit.url} target="_blank" className="px-6 py-1 text-xs
                  text-white bg-red-600 flex w-fit  gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16"
